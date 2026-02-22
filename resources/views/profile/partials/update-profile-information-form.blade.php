@@ -21,12 +21,22 @@
             <x-input-label for="profile_photo" :value="__('Profile Photo')" />
 
             <div class="mt-2 flex items-center gap-4">
-                <img src="{{ $user->profile_photo_url }}"
-                     class="w-20 h-20 rounded-full object-cover border">
+                @if($user->profile_photo)
+                    <img src="{{ $user->profile_photo_url }}"
+                         alt="Profile photo"
+                         class="w-20 h-20 rounded-full object-cover border"
+                         onerror="this.src='{{ asset('images/default-avatar.png') }}'"
+                    >
+                @else
+                    <img src="{{ asset('images/default-avatar.png') }}"
+                         alt="Default avatar"
+                         class="w-20 h-20 rounded-full object-cover border">
+                @endif
 
                 <input type="file"
                        name="profile_photo"
                        id="profile_photo"
+                       accept="image/jpeg,image/png,image/gif,image/webp"
                        class="block w-full text-sm text-gray-500
                               file:mr-4 file:py-2 file:px-4
                               file:rounded-md file:border-0
