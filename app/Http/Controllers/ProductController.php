@@ -38,6 +38,7 @@ class ProductController extends Controller
             'name' => 'required',
             'price' => 'required|numeric',
             'description' => 'nullable',
+            'category_id' => 'required|exists:categories,id',
             'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048'
         ]);
 

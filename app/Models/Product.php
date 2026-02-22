@@ -12,7 +12,7 @@ class Product extends Model
         'description',
         'price',
         'image',
-        'views', // 🔥 WAJIB
+        'views', 
     ];
 
     /**
