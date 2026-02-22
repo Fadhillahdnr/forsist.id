@@ -13,7 +13,7 @@
                    class="flex items-center gap-2 font-bold text-lg"
                    style="color: var(--text-main);">
                     <x-application-logo class="h-9 w-auto"
-                        style="fill: var(--primary);" />
+                        style="color: var(--primary);" />
                     <span>Admin Panel</span>
                 </a>
 
