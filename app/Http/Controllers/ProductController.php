@@ -43,7 +43,7 @@ class ProductController extends Controller
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('products', 'public');
         }
-
+        
         Product::create($data);
 
         return redirect()->route('admin.products.index')
@@ -121,7 +121,7 @@ class ProductController extends Controller
             $product->increment('views');
 
             // Broadcast ke admin
-            // broadcast(new \App\Events\ProductViewed())->toOthers();
+            broadcast(new \App\Events\ProductViewed())->toOthers();
 
             session()->put($sessionKey, true);
         }
