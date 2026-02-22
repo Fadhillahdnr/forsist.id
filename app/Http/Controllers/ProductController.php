@@ -6,8 +6,6 @@ use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\ImageManager;
-use Intervention\Image\Drivers\Gd\Driver;
 
 class ProductController extends Controller
 {
@@ -43,29 +41,9 @@ class ProductController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-
-            $manager = new ImageManager(new Driver());
-
-            $image = $manager->read($request->file('image'));
-
-            // resize proporsional
-            $image->resize(800, 800, function ($constraint) {
-                $constraint->aspectRatio();
-                $constraint->upsize();
-            });
-
-            // canvas biar rapi
-            $canvas = $manager->create(800, 800)->fill('#020617');
-            $canvas->place($image, 'center');
-
-            $filename = uniqid() . '.webp';
-
-            $canvas->toWebp(85)
-                ->save(storage_path('app/public/products/' . $filename));
-
-            $data['image'] = 'products/' . $filename;
+            $data['image'] = $request->file('image')->store('products', 'public');
         }
-
+        
         Product::create($data);
 
         return redirect()->route('admin.products.index')
