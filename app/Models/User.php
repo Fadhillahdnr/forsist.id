@@ -63,6 +63,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getProfilePhotoUrlAttribute()
     {
         if ($this->profile_photo) {
+            // Jika sudah Cloudinary URL, gunakan langsung
+            if (str_contains($this->profile_photo, 'cloudinary') || str_contains($this->profile_photo, 'http')) {
+                return $this->profile_photo;
+            }
+            // Jika path lokal, gunakan asset
             return asset('storage/' . $this->profile_photo);
         }
 
