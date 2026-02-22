@@ -56,7 +56,7 @@
 
             {{-- IMAGE --}}
             <div class="product-image-wrapper">
-                <img src="{{ asset('storage/'.$product->image) }}"
+                <img src="{{ $product->image }}"
                      class="product-img"
                      alt="{{ $product->name }}">
 

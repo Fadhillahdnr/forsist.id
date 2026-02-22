@@ -32,7 +32,7 @@
                         <div class="card-body">
                             <div class="row align-items-center">
                                 <div class="col-md-2 text-center">
-                                    <img src="{{ asset('storage/'.$item->product->image) }}"
+                                    <img src="{{ $item->product->image }}"
                                          class="img-fluid rounded"
                                          style="max-height:80px">
                                 </div>

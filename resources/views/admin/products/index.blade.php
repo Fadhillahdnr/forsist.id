@@ -72,7 +72,7 @@
                                 {{-- PRODUK --}}
                                 <td>
                                     <div class="d-flex align-items-center gap-3">
-                                        <img src="{{ asset('storage/'.$product->image) }}"
+                                        <img src="{{ $product->image }}"
                                              width="55"
                                              height="55"
                                              class="rounded border object-fit-cover">

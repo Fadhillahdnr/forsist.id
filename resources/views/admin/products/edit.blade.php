@@ -75,7 +75,7 @@
                     <div class="col-md-6">
                         <label class="form-label">Gambar Sekarang</label>
                         <div>
-                            <img src="{{ asset('storage/'.$product->image) }}"
+                            <img src="{{ $product->image }}"
                                  width="120"
                                  class="rounded border">
                         </div>

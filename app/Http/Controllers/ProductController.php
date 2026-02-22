@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class ProductController extends Controller
 {
@@ -30,26 +30,38 @@ class ProductController extends Controller
         return view('admin.products.create', compact('categories'));
     }
 
-   public function store(Request $request)
+    public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required',
-            'price' => 'required|numeric',
+            'name'        => 'required',
+            'price'       => 'required|numeric',
             'description' => 'nullable',
             'category_id' => 'required|exists:categories,id',
-            'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048'
+            'image'       => 'required|image|mimes:jpg,jpeg,png,webp|max:2048'
         ]);
 
+        // Upload ke Cloudinary
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('products', 'public');
+            $uploadedFile = Cloudinary::upload(
+                $request->file('image')->getRealPath(),
+                [
+                    'folder' => 'forsist/products',
+                    'transformation' => [
+                        'width'  => 500,
+                        'height' => 500,
+                        'crop'   => 'fill'
+                    ]
+                ]
+            );
+
+            $data['image'] = $uploadedFile->getSecurePath();
         }
-        
+
         Product::create($data);
 
         return redirect()->route('admin.products.index')
             ->with('success', 'Produk berhasil ditambahkan');
     }
-
 
     public function edit(string $id)
     {
@@ -63,36 +75,41 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
 
-        $request->validate([
+        $data = $request->validate([
             'name'        => 'required',
             'description' => 'required',
             'price'       => 'required|numeric',
             'category_id' => 'required|exists:categories,id',
-            'image'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'image'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
-        $data = $request->only([
-            'name',
-            'description',
-            'price',
-            'category_id',
-        ]);
-
-        // Jika upload gambar baru
         if ($request->hasFile('image')) {
 
-            // Hapus gambar lama
-            if ($product->image && Storage::disk('public')->exists($product->image)) {
-                Storage::disk('public')->delete($product->image);
+            // Hapus gambar lama dari Cloudinary
+            if ($product->image) {
+                $publicId = pathinfo($product->image, PATHINFO_FILENAME);
+                Cloudinary::destroy('forsist/products/' . $publicId);
             }
 
-            // Simpan gambar baru
-            $data['image'] = $request->file('image')->store('products', 'public');
+            // Upload gambar baru
+            $uploadedFile = Cloudinary::upload(
+                $request->file('image')->getRealPath(),
+                [
+                    'folder' => 'forsist/products',
+                    'transformation' => [
+                        'width'  => 500,
+                        'height' => 500,
+                        'crop'   => 'fill'
+                    ]
+                ]
+            );
+
+            $data['image'] = $uploadedFile->getSecurePath();
         }
 
         $product->update($data);
 
-        return redirect('/admin/products')
+        return redirect()->route('admin.products.index')
             ->with('success', 'Produk berhasil diupdate');
     }
 
@@ -100,9 +117,10 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
 
-        // Hapus gambar dari storage
-        if ($product->image && Storage::disk('public')->exists($product->image)) {
-            Storage::disk('public')->delete($product->image);
+        // Hapus gambar dari Cloudinary
+        if ($product->image) {
+            $publicId = pathinfo($product->image, PATHINFO_FILENAME);
+            Cloudinary::destroy('forsist/products/' . $publicId);
         }
 
         $product->delete();
@@ -112,17 +130,10 @@ class ProductController extends Controller
 
     public function show(Product $product)
     {
-        // DEBUG: pastikan method ini terpanggil
-        // dd('SHOW HIT', $product->id);
-
         $sessionKey = 'viewed_product_' . $product->id;
 
         if (!session()->has($sessionKey)) {
             $product->increment('views');
-
-            // Broadcast ke admin
-            broadcast(new \App\Events\ProductViewed())->toOthers();
-
             session()->put($sessionKey, true);
         }
 

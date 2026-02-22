@@ -10,7 +10,7 @@
         <div class="col-md-6">
             <div class="card product-card border-0 shadow-lg">
                 <img 
-                    src="{{ asset('storage/'.$product->image) }}"
+                    src="{{ $product->image }}"
                     alt="{{ $product->name }}"
                     class="img-fluid product-img rounded"
                 >
