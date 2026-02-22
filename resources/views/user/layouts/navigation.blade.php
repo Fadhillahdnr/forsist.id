@@ -17,10 +17,10 @@
 
                 <a href="{{ route('beranda') }}" class="flex items-center gap-3 group">
                     <x-application-logo class="h-9 w-auto transition group-hover:scale-105"
-                        style="fill: var(--primary);" />
+                        style="color: #ec4899;" />
                     <span class="font-bold tracking-wide text-lg"
-                          style="color: var(--text-main);">
-                        Toko Online
+                          style="color: #ec4899;">
+                        Forsist.id
                     </span>
                 </a>
 
