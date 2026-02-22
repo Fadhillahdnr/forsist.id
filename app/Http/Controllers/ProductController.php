@@ -86,7 +86,7 @@ class ProductController extends Controller
             // Hapus gambar lama dari Cloudinary
             if ($product->image) {
                 $publicId = pathinfo($product->image, PATHINFO_FILENAME);
-                Cloudinary::adminApi()->delete_resources(['forsist/products/' . $publicId]);
+                Cloudinary::adminApi()->deleteAssets('forsist/products/' . $publicId);
             }
 
             // Upload gambar baru
@@ -116,7 +116,7 @@ class ProductController extends Controller
         // Hapus gambar dari Cloudinary
         if ($product->image) {
             $publicId = pathinfo($product->image, PATHINFO_FILENAME);
-            Cloudinary::adminApi()->delete_resources(['forsist/products/' . $publicId]);
+            Cloudinary::adminApi()->deleteAssets('forsist/products/' . $publicId);
         }
 
         $product->delete();
