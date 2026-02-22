@@ -25,12 +25,15 @@
                     <img src="{{ $user->profile_photo_url }}"
                          alt="Profile photo"
                          class="w-20 h-20 rounded-full object-cover border"
-                         onerror="this.src='{{ asset('images/default-avatar.png') }}'"
+                         onerror="this.style.display='none'; document.getElementById('default-avatar').style.display='block'"
                     >
+                    <div id="default-avatar" style="display: none;" class="w-20 h-20 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-semibold border">
+                        {{ strtoupper(trim($user->name)[0] ?? 'U') }}
+                    </div>
                 @else
-                    <img src="{{ asset('images/default-avatar.png') }}"
-                         alt="Default avatar"
-                         class="w-20 h-20 rounded-full object-cover border">
+                    <div class="w-20 h-20 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-semibold border">
+                        {{ strtoupper(trim($user->name)[0] ?? 'U') }}
+                    </div>
                 @endif
 
                 <input type="file"
