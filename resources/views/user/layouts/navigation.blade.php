@@ -152,7 +152,7 @@
         @endauth
 
         @guest
-            <a href="{{ route('login') }}" class="mobile-link">Login</a>
+            <a href="{{ route('login') }}" class="mobile-link">Login/Register</a>
         @endguest
     </div>
 </nav>
