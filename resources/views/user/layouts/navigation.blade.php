@@ -99,7 +99,7 @@
                 @guest
                     <a href="{{ route('login') }}"
                        class="btn btn-primary px-5 py-2 rounded-xl shadow-sm">
-                        Login
+                        Login/Register
                     </a>
                 @endguest
             </div>
